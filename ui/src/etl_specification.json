@@ -1,0 +1,326 @@
+{
+    "metadata": {
+        "name": "Employee Performance and Bonus ETL Specification",
+        "version": "1.0",
+        "description": "Declarative ETL specification for processing employee performance data and calculating bonuses",
+        "created_date": "2024-01-01",
+        "author": "ETL System"
+    },
+    "schema": {
+        "required_columns": [
+            "employee_id",
+            "employee_name",
+            "department",
+            "base_salary",
+            "sales_target",
+            "actual_sales",
+            "customer_satisfaction",
+            "projects_completed",
+            "attendance_rate",
+            "years_of_service"
+        ],
+        "data_types": {
+            "employee_id": "integer",
+            "employee_name": "string",
+            "department": "string",
+            "base_salary": "float",
+            "sales_target": "float",
+            "actual_sales": "float",
+            "customer_satisfaction": "float",
+            "projects_completed": "integer",
+            "attendance_rate": "float",
+            "years_of_service": "float"
+        }
+    },
+    "validation_rules": [
+        {
+            "column": "employee_id",
+            "type": "not_null",
+            "description": "Employee ID must not be null"
+        },
+        {
+            "column": "employee_id",
+            "type": "unique",
+            "description": "Employee ID must be unique"
+        },
+        {
+            "column": "base_salary",
+            "type": "range",
+            "parameters": {
+                "min": 30000,
+                "max": 200000
+            },
+            "description": "Base salary must be between $30,000 and $200,000"
+        },
+        {
+            "column": "sales_target",
+            "type": "range",
+            "parameters": {
+                "min": 0,
+                "max": 1000000
+            },
+            "description": "Sales target must be between $0 and $1,000,000"
+        },
+        {
+            "column": "actual_sales",
+            "type": "range",
+            "parameters": {
+                "min": 0,
+                "max": 1000000
+            },
+            "description": "Actual sales must be between $0 and $1,000,000"
+        },
+        {
+            "column": "customer_satisfaction",
+            "type": "range",
+            "parameters": {
+                "min": 1.0,
+                "max": 5.0
+            },
+            "description": "Customer satisfaction must be between 1.0 and 5.0"
+        },
+        {
+            "column": "projects_completed",
+            "type": "range",
+            "parameters": {
+                "min": 0,
+                "max": 50
+            },
+            "description": "Projects completed must be between 0 and 50"
+        },
+        {
+            "column": "attendance_rate",
+            "type": "range",
+            "parameters": {
+                "min": 0.0,
+                "max": 1.0
+            },
+            "description": "Attendance rate must be between 0.0 and 1.0"
+        },
+        {
+            "column": "years_of_service",
+            "type": "range",
+            "parameters": {
+                "min": 0,
+                "max": 30
+            },
+            "description": "Years of service must be between 0 and 30"
+        }
+    ],
+    "constants": {
+        "SALES_BONUS_RATE": 0.05,
+        "SATISFACTION_BONUS_RATE": 0.02,
+        "PROJECT_BONUS_RATE": 500,
+        "ATTENDANCE_BONUS_RATE": 0.01,
+        "LOYALTY_BONUS_RATE": 0.005,
+        "MAX_BONUS_PERCENTAGE": 0.25,
+        "MIN_PERFORMANCE_THRESHOLD": 0.6,
+        "EXCELLENT_PERFORMANCE_THRESHOLD": 0.9,
+        "DEPARTMENT_BONUS_MULTIPLIERS": {
+            "Sales": 1.2,
+            "Engineering": 1.1,
+            "Marketing": 1.15,
+            "HR": 1.0,
+            "Finance": 1.05
+        }
+    },
+    "business_rules": [
+        {
+            "name": "sales_performance_score",
+            "description": "Calculate sales performance score based on actual vs target sales",
+            "formula": "np.where(df['sales_target'] > 0, df['actual_sales'] / df['sales_target'], 0)",
+            "dependencies": [
+                "actual_sales",
+                "sales_target"
+            ],
+            "output_column": "sales_performance_score"
+        },
+        {
+            "name": "customer_satisfaction_score",
+            "description": "Normalize customer satisfaction score to 0-1 scale",
+            "formula": "(df['customer_satisfaction'] - 1) / 4",
+            "dependencies": [
+                "customer_satisfaction"
+            ],
+            "output_column": "customer_satisfaction_score"
+        },
+        {
+            "name": "project_performance_score",
+            "description": "Calculate project performance score based on projects completed",
+            "formula": "np.minimum(df['projects_completed'] / 10, 1.0)",
+            "dependencies": [
+                "projects_completed"
+            ],
+            "output_column": "project_performance_score"
+        },
+        {
+            "name": "attendance_score",
+            "description": "Use attendance rate directly as attendance score",
+            "formula": "df['attendance_rate']",
+            "dependencies": [
+                "attendance_rate"
+            ],
+            "output_column": "attendance_score"
+        },
+        {
+            "name": "loyalty_score",
+            "description": "Calculate loyalty score based on years of service",
+            "formula": "np.minimum(df['years_of_service'] / 10, 1.0)",
+            "dependencies": [
+                "years_of_service"
+            ],
+            "output_column": "loyalty_score"
+        },
+        {
+            "name": "overall_performance_score",
+            "description": "Calculate weighted overall performance score",
+            "formula": "(df['sales_performance_score'] * 0.3 + df['customer_satisfaction_score'] * 0.2 + df['project_performance_score'] * 0.2 + df['attendance_score'] * 0.2 + df['loyalty_score'] * 0.1)",
+            "dependencies": [
+                "sales_performance_score",
+                "customer_satisfaction_score",
+                "project_performance_score",
+                "attendance_score",
+                "loyalty_score"
+            ],
+            "output_column": "performance_score"
+        },
+        {
+            "name": "sales_bonus",
+            "description": "Calculate bonus based on sales performance",
+            "formula": "df['base_salary'] * df['sales_performance_score'] * SALES_BONUS_RATE",
+            "dependencies": [
+                "base_salary",
+                "sales_performance_score"
+            ],
+            "output_column": "sales_bonus"
+        },
+        {
+            "name": "satisfaction_bonus",
+            "description": "Calculate bonus based on customer satisfaction",
+            "formula": "df['base_salary'] * df['customer_satisfaction_score'] * SATISFACTION_BONUS_RATE",
+            "dependencies": [
+                "base_salary",
+                "customer_satisfaction_score"
+            ],
+            "output_column": "satisfaction_bonus"
+        },
+        {
+            "name": "project_bonus",
+            "description": "Calculate bonus based on projects completed",
+            "formula": "df['projects_completed'] * PROJECT_BONUS_RATE",
+            "dependencies": [
+                "projects_completed"
+            ],
+            "output_column": "project_bonus"
+        },
+        {
+            "name": "attendance_bonus",
+            "description": "Calculate bonus based on attendance rate",
+            "formula": "df['base_salary'] * df['attendance_score'] * ATTENDANCE_BONUS_RATE",
+            "dependencies": [
+                "base_salary",
+                "attendance_score"
+            ],
+            "output_column": "attendance_bonus"
+        },
+        {
+            "name": "loyalty_bonus",
+            "description": "Calculate bonus based on years of service",
+            "formula": "df['base_salary'] * df['loyalty_score'] * LOYALTY_BONUS_RATE",
+            "dependencies": [
+                "base_salary",
+                "loyalty_score"
+            ],
+            "output_column": "loyalty_bonus"
+        },
+        {
+            "name": "department_multiplier",
+            "description": "Apply department-specific bonus multiplier",
+            "formula": "df['department'].map(DEPARTMENT_BONUS_MULTIPLIERS).fillna(1.0)",
+            "dependencies": [
+                "department"
+            ],
+            "output_column": "department_multiplier"
+        },
+        {
+            "name": "performance_multiplier",
+            "description": "Calculate performance-based multiplier",
+            "formula": "np.where(df['performance_score'] >= EXCELLENT_PERFORMANCE_THRESHOLD, 1.5, np.where(df['performance_score'] >= MIN_PERFORMANCE_THRESHOLD, 1.0, 0.5))",
+            "dependencies": [
+                "performance_score"
+            ],
+            "output_column": "performance_multiplier"
+        },
+        {
+            "name": "subtotal_bonus",
+            "description": "Calculate subtotal of all bonus components",
+            "formula": "df['sales_bonus'] + df['satisfaction_bonus'] + df['project_bonus'] + df['attendance_bonus'] + df['loyalty_bonus']",
+            "dependencies": [
+                "sales_bonus",
+                "satisfaction_bonus",
+                "project_bonus",
+                "attendance_bonus",
+                "loyalty_bonus"
+            ],
+            "output_column": "subtotal_bonus"
+        },
+        {
+            "name": "total_bonus",
+            "description": "Calculate final total bonus with multipliers and caps",
+            "formula": "np.minimum(df['subtotal_bonus'] * df['department_multiplier'] * df['performance_multiplier'], df['base_salary'] * MAX_BONUS_PERCENTAGE)",
+            "dependencies": [
+                "subtotal_bonus",
+                "department_multiplier",
+                "performance_multiplier",
+                "base_salary"
+            ],
+            "output_column": "total_bonus"
+        },
+        {
+            "name": "bonus_percentage",
+            "description": "Calculate bonus as percentage of base salary",
+            "formula": "np.where(df['base_salary'] > 0, (df['total_bonus'] / df['base_salary']) * 100, 0)",
+            "dependencies": [
+                "total_bonus",
+                "base_salary"
+            ],
+            "output_column": "bonus_percentage"
+        },
+        {
+            "name": "performance_category",
+            "description": "Categorize employees based on performance score",
+            "formula": "np.where(df['performance_score'] >= EXCELLENT_PERFORMANCE_THRESHOLD, 'Excellent', np.where(df['performance_score'] >= MIN_PERFORMANCE_THRESHOLD, 'Good', 'Needs Improvement'))",
+            "dependencies": [
+                "performance_score"
+            ],
+            "output_column": "performance_category"
+        }
+    ],
+    "output_schema": {
+        "required_columns": [
+            "employee_id",
+            "employee_name",
+            "department",
+            "base_salary",
+            "performance_score",
+            "performance_category",
+            "total_bonus",
+            "bonus_percentage"
+        ],
+        "optional_columns": [
+            "sales_performance_score",
+            "customer_satisfaction_score",
+            "project_performance_score",
+            "attendance_score",
+            "loyalty_score",
+            "sales_bonus",
+            "satisfaction_bonus",
+            "project_bonus",
+            "attendance_bonus",
+            "loyalty_bonus",
+            "department_multiplier",
+            "performance_multiplier",
+            "subtotal_bonus"
+        ]
+    }
+}
