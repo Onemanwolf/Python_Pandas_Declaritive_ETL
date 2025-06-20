@@ -190,6 +190,8 @@ function App() {
             business_rules: newRules,
           }))
         }}
+        availableColumns={spec.schema.required_columns}
+        availableConstants={Object.keys(spec.constants)}
       />
 
       <OutputSchemaEditor

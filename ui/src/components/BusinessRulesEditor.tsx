@@ -1,4 +1,5 @@
 import React from 'react';
+import FormulaBuilder from './FormulaBuilder';
 
 interface BusinessRule {
   name: string;
@@ -11,13 +12,17 @@ interface BusinessRule {
 interface BusinessRulesEditorProps {
   rules: BusinessRule[];
   onChange: (newRules: BusinessRule[]) => void;
+  availableColumns?: string[];
+  availableConstants?: string[];
 }
 
 const BusinessRuleEditor: React.FC<{
     rule: BusinessRule;
     onChange: (newRule: BusinessRule) => void;
     onRemove: () => void;
-}> = ({ rule, onChange, onRemove }) => {
+    availableColumns: string[];
+    availableConstants: string[];
+}> = ({ rule, onChange, onRemove, availableColumns, availableConstants }) => {
 
     const handleDependencyChange = (index: number, value: string) => {
         const newDependencies = [...rule.dependencies];
@@ -48,7 +53,14 @@ const BusinessRuleEditor: React.FC<{
                 <textarea value={rule.description} onChange={e => onChange({...rule, description: e.target.value})} />
 
                 <label>Formula</label>
-                <textarea value={rule.formula} onChange={e => onChange({...rule, formula: e.target.value})} rows={3}/>
+                <div>
+                    <FormulaBuilder
+                        value={rule.formula}
+                        onChange={(formula) => onChange({...rule, formula})}
+                        availableColumns={availableColumns}
+                        availableConstants={availableConstants}
+                    />
+                </div>
 
                 <label>Output Column</label>
                 <input type="text" value={rule.output_column} onChange={e => onChange({...rule, output_column: e.target.value})} />
@@ -74,7 +86,7 @@ const BusinessRuleEditor: React.FC<{
 }
 
 
-const BusinessRulesEditor: React.FC<BusinessRulesEditorProps> = ({ rules, onChange }) => {
+const BusinessRulesEditor: React.FC<BusinessRulesEditorProps> = ({ rules, onChange, availableColumns = [], availableConstants = [] }) => {
 
   const handleRuleChange = (index: number, newRule: BusinessRule) => {
     const newRules = [...rules];
@@ -102,6 +114,8 @@ const BusinessRulesEditor: React.FC<BusinessRulesEditorProps> = ({ rules, onChan
           rule={rule}
           onChange={(newRule) => handleRuleChange(index, newRule)}
           onRemove={() => removeRule(index)}
+          availableColumns={availableColumns}
+          availableConstants={availableConstants}
         />
       ))}
     </div>
