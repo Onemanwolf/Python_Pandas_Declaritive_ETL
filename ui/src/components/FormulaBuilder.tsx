@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface FormulaBuilderProps {
   value: string;
@@ -16,6 +16,199 @@ const FormulaBuilder: React.FC<FormulaBuilderProps> = ({ value, onChange, availa
   const [showBuilder, setShowBuilder] = useState(false);
   const [formulaParts, setFormulaParts] = useState<FormulaPart[]>([]);
   const [manualFormula, setManualFormula] = useState(value);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Detect dark mode
+  useEffect(() => {
+    const checkDarkMode = () => {
+      const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setIsDarkMode(isDark);
+    };
+
+    checkDarkMode();
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', checkDarkMode);
+
+    return () => mediaQuery.removeEventListener('change', checkDarkMode);
+  }, []);
+
+  // Dark mode styles
+  const darkModeStyles = {
+    container: {
+      border: '1px solid #444',
+      padding: '1rem',
+      borderRadius: '4px',
+      backgroundColor: '#2d2d2d',
+      color: '#ffffff'
+    },
+    textarea: {
+      width: '100%',
+      minHeight: '60px',
+      padding: '0.5rem',
+      fontFamily: 'monospace',
+      fontSize: '0.9em',
+      border: '1px solid #555',
+      borderRadius: '4px',
+      resize: 'vertical' as const,
+      backgroundColor: '#1e1e1e',
+      color: '#ffffff'
+    },
+    formulaDisplay: {
+      backgroundColor: '#1e1e1e',
+      padding: '0.5rem',
+      borderRadius: '4px',
+      marginBottom: '1rem',
+      fontFamily: 'monospace',
+      minHeight: '2rem',
+      fontSize: '0.9em',
+      color: '#ffffff',
+      border: '1px solid #555'
+    },
+    button: {
+      padding: '0.25rem 0.5rem',
+      fontSize: '0.8em',
+      backgroundColor: '#444',
+      color: '#ffffff',
+      border: '1px solid #666',
+      borderRadius: '4px',
+      cursor: 'pointer'
+    },
+    columnButton: {
+      padding: '0.25rem 0.5rem',
+      textAlign: 'left' as const,
+      backgroundColor: '#1a3a5f',
+      border: '1px solid #2196f3',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      color: '#ffffff'
+    },
+    constantButton: {
+      padding: '0.25rem 0.5rem',
+      textAlign: 'left' as const,
+      backgroundColor: '#4a1a5f',
+      border: '1px solid #9c27b0',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      color: '#ffffff'
+    },
+    functionButton: {
+      padding: '0.25rem 0.5rem',
+      textAlign: 'left' as const,
+      backgroundColor: '#1a5f1a',
+      border: '1px solid #4caf50',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      fontSize: '0.8em',
+      color: '#ffffff'
+    },
+    operatorButton: {
+      padding: '0.25rem 0.5rem',
+      textAlign: 'left' as const,
+      backgroundColor: '#5f3a1a',
+      border: '1px solid #ff9800',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      color: '#ffffff'
+    },
+    input: {
+      flex: 1,
+      padding: '0.25rem',
+      backgroundColor: '#1e1e1e',
+      color: '#ffffff',
+      border: '1px solid #555',
+      borderRadius: '4px'
+    }
+  };
+
+  // Light mode styles
+  const lightModeStyles = {
+    container: {
+      border: '1px solid #ddd',
+      padding: '1rem',
+      borderRadius: '4px',
+      backgroundColor: '#ffffff',
+      color: '#000000'
+    },
+    textarea: {
+      width: '100%',
+      minHeight: '60px',
+      padding: '0.5rem',
+      fontFamily: 'monospace',
+      fontSize: '0.9em',
+      border: '1px solid #ccc',
+      borderRadius: '4px',
+      resize: 'vertical' as const,
+      backgroundColor: '#ffffff',
+      color: '#000000'
+    },
+    formulaDisplay: {
+      backgroundColor: '#f5f5f5',
+      padding: '0.5rem',
+      borderRadius: '4px',
+      marginBottom: '1rem',
+      fontFamily: 'monospace',
+      minHeight: '2rem',
+      fontSize: '0.9em',
+      color: '#000000',
+      border: '1px solid #ccc'
+    },
+    button: {
+      padding: '0.25rem 0.5rem',
+      fontSize: '0.8em',
+      backgroundColor: '#f0f0f0',
+      color: '#000000',
+      border: '1px solid #ccc',
+      borderRadius: '4px',
+      cursor: 'pointer'
+    },
+    columnButton: {
+      padding: '0.25rem 0.5rem',
+      textAlign: 'left' as const,
+      backgroundColor: '#e3f2fd',
+      border: '1px solid #2196f3',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      color: '#000000'
+    },
+    constantButton: {
+      padding: '0.25rem 0.5rem',
+      textAlign: 'left' as const,
+      backgroundColor: '#f3e5f5',
+      border: '1px solid #9c27b0',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      color: '#000000'
+    },
+    functionButton: {
+      padding: '0.25rem 0.5rem',
+      textAlign: 'left' as const,
+      backgroundColor: '#e8f5e8',
+      border: '1px solid #4caf50',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      fontSize: '0.8em',
+      color: '#000000'
+    },
+    operatorButton: {
+      padding: '0.25rem 0.5rem',
+      textAlign: 'left' as const,
+      backgroundColor: '#fff3e0',
+      border: '1px solid #ff9800',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      color: '#000000'
+    },
+    input: {
+      flex: 1,
+      padding: '0.25rem',
+      backgroundColor: '#ffffff',
+      color: '#000000',
+      border: '1px solid #ccc',
+      borderRadius: '4px'
+    }
+  };
+
+  const styles = isDarkMode ? darkModeStyles : lightModeStyles;
 
   const operators = [
     { label: 'Add (+)', value: ' + ' },
@@ -154,26 +347,52 @@ const FormulaBuilder: React.FC<FormulaBuilderProps> = ({ value, onChange, availa
     setFormulaParts(parts);
   };
 
+  const getPartColor = (type: FormulaPart['type']): string => {
+    if (isDarkMode) {
+      switch (type) {
+        case 'column': return '#1a3a5f';
+        case 'constant': return '#4a1a5f';
+        case 'function': return '#1a5f1a';
+        case 'operator': return '#5f3a1a';
+        case 'value': return '#5f1a3a';
+        case 'condition': return '#3a5f1a';
+        case 'parenthesis': return '#5f3a1a';
+        default: return '#2d2d2d';
+      }
+    } else {
+      switch (type) {
+        case 'column': return '#e3f2fd';
+        case 'constant': return '#f3e5f5';
+        case 'function': return '#e8f5e8';
+        case 'operator': return '#fff3e0';
+        case 'value': return '#fce4ec';
+        case 'condition': return '#f1f8e9';
+        case 'parenthesis': return '#fff3e0';
+        default: return '#f5f5f5';
+      }
+    }
+  };
+
   return (
-    <div style={{ border: '1px solid #ddd', padding: '1rem', borderRadius: '4px' }}>
+    <div style={styles.container}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
         <label style={{ fontWeight: 'bold' }}>Formula Builder</label>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           <button
             onClick={() => setShowBuilder(!showBuilder)}
-            style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
+            style={styles.button}
           >
             {showBuilder ? 'Hide Builder' : 'Show Builder'}
           </button>
           <button
             onClick={loadExistingFormula}
-            style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
+            style={styles.button}
           >
             Parse Existing
           </button>
           <button
             onClick={clearFormula}
-            style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
+            style={styles.button}
           >
             Clear
           </button>
@@ -186,30 +405,13 @@ const FormulaBuilder: React.FC<FormulaBuilderProps> = ({ value, onChange, availa
         <textarea
           value={manualFormula}
           onChange={(e) => handleManualFormulaChange(e.target.value)}
-          style={{
-            width: '100%',
-            minHeight: '60px',
-            padding: '0.5rem',
-            fontFamily: 'monospace',
-            fontSize: '0.9em',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            resize: 'vertical'
-          }}
+          style={styles.textarea}
           placeholder="Type your formula here or use the builder below..."
         />
       </div>
 
       {/* Formula Display */}
-      <div style={{
-        backgroundColor: '#f5f5f5',
-        padding: '0.5rem',
-        borderRadius: '4px',
-        marginBottom: '1rem',
-        fontFamily: 'monospace',
-        minHeight: '2rem',
-        fontSize: '0.9em'
-      }}>
+      <div style={styles.formulaDisplay}>
         {value || 'No formula built yet'}
       </div>
 
@@ -226,7 +428,8 @@ const FormulaBuilder: React.FC<FormulaBuilderProps> = ({ value, onChange, availa
                 fontSize: '0.8em',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.25rem'
+                gap: '0.25rem',
+                color: isDarkMode ? '#ffffff' : '#000000'
               }}
             >
               {part.value}
@@ -237,7 +440,7 @@ const FormulaBuilder: React.FC<FormulaBuilderProps> = ({ value, onChange, availa
                   border: 'none',
                   cursor: 'pointer',
                   fontSize: '0.7em',
-                  color: '#666'
+                  color: isDarkMode ? '#cccccc' : '#666666'
                 }}
               >
                 ×
@@ -257,14 +460,7 @@ const FormulaBuilder: React.FC<FormulaBuilderProps> = ({ value, onChange, availa
                 <button
                   key={column}
                   onClick={() => addPart('column', column)}
-                  style={{
-                    padding: '0.25rem 0.5rem',
-                    textAlign: 'left',
-                    backgroundColor: '#e3f2fd',
-                    border: '1px solid #2196f3',
-                    borderRadius: '4px',
-                    cursor: 'pointer'
-                  }}
+                  style={styles.columnButton}
                 >
                   {column}
                 </button>
@@ -280,14 +476,7 @@ const FormulaBuilder: React.FC<FormulaBuilderProps> = ({ value, onChange, availa
                 <button
                   key={constant}
                   onClick={() => addPart('constant', constant)}
-                  style={{
-                    padding: '0.25rem 0.5rem',
-                    textAlign: 'left',
-                    backgroundColor: '#f3e5f5',
-                    border: '1px solid #9c27b0',
-                    borderRadius: '4px',
-                    cursor: 'pointer'
-                  }}
+                  style={styles.constantButton}
                 >
                   {constant}
                 </button>
@@ -303,15 +492,7 @@ const FormulaBuilder: React.FC<FormulaBuilderProps> = ({ value, onChange, availa
                 <button
                   key={func.value}
                   onClick={() => addPart('function', func.value)}
-                  style={{
-                    padding: '0.25rem 0.5rem',
-                    textAlign: 'left',
-                    backgroundColor: '#e8f5e8',
-                    border: '1px solid #4caf50',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    fontSize: '0.8em'
-                  }}
+                  style={styles.functionButton}
                 >
                   {func.label}
                 </button>
@@ -327,14 +508,7 @@ const FormulaBuilder: React.FC<FormulaBuilderProps> = ({ value, onChange, availa
                 <button
                   key={op.value}
                   onClick={() => addPart('operator', op.value)}
-                  style={{
-                    padding: '0.25rem 0.5rem',
-                    textAlign: 'left',
-                    backgroundColor: '#fff3e0',
-                    border: '1px solid #ff9800',
-                    borderRadius: '4px',
-                    cursor: 'pointer'
-                  }}
+                  style={styles.operatorButton}
                 >
                   {op.label}
                 </button>
@@ -343,11 +517,7 @@ const FormulaBuilder: React.FC<FormulaBuilderProps> = ({ value, onChange, availa
                 <button
                   onClick={() => addPart('parenthesis', '(')}
                   style={{
-                    padding: '0.25rem 0.5rem',
-                    backgroundColor: '#fff3e0',
-                    border: '1px solid #ff9800',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
+                    ...styles.operatorButton,
                     flex: 1
                   }}
                 >
@@ -356,11 +526,7 @@ const FormulaBuilder: React.FC<FormulaBuilderProps> = ({ value, onChange, availa
                 <button
                   onClick={() => addPart('parenthesis', ')')}
                   style={{
-                    padding: '0.25rem 0.5rem',
-                    backgroundColor: '#fff3e0',
-                    border: '1px solid #ff9800',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
+                    ...styles.operatorButton,
                     flex: 1
                   }}
                 >
@@ -383,7 +549,7 @@ const FormulaBuilder: React.FC<FormulaBuilderProps> = ({ value, onChange, availa
                     e.currentTarget.value = '';
                   }
                 }}
-                style={{ flex: 1, padding: '0.25rem' }}
+                style={styles.input}
               />
               <button
                 onClick={(e) => {
@@ -393,7 +559,7 @@ const FormulaBuilder: React.FC<FormulaBuilderProps> = ({ value, onChange, availa
                     input.value = '';
                   }
                 }}
-                style={{ padding: '0.25rem 0.5rem' }}
+                style={styles.button}
               >
                 Add
               </button>
@@ -403,19 +569,6 @@ const FormulaBuilder: React.FC<FormulaBuilderProps> = ({ value, onChange, availa
       )}
     </div>
   );
-};
-
-const getPartColor = (type: FormulaPart['type']): string => {
-  switch (type) {
-    case 'column': return '#e3f2fd';
-    case 'constant': return '#f3e5f5';
-    case 'function': return '#e8f5e8';
-    case 'operator': return '#fff3e0';
-    case 'value': return '#fce4ec';
-    case 'condition': return '#f1f8e9';
-    case 'parenthesis': return '#fff3e0';
-    default: return '#f5f5f5';
-  }
 };
 
 export default FormulaBuilder;

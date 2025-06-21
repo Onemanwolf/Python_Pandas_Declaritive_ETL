@@ -14,29 +14,67 @@ const SchemaEditor: React.FC<SchemaEditorProps> = ({ schema, onChange }) => {
   const handleRequiredColumnChange = (index: number, value: string) => {
     const newRequiredColumns = [...schema.required_columns];
     newRequiredColumns[index] = value;
-    onChange({ ...schema, required_columns: newRequiredColumns });
+
+    // Update data types to include the new column name
+    const newDataTypes = { ...schema.data_types };
+    const oldColumnName = schema.required_columns[index];
+    if (oldColumnName && oldColumnName !== value) {
+      // If the column name changed, update the data type mapping
+      if (newDataTypes[oldColumnName]) {
+        newDataTypes[value] = newDataTypes[oldColumnName];
+        delete newDataTypes[oldColumnName];
+      } else if (!newDataTypes[value]) {
+        // If it's a new column, set default data type
+        newDataTypes[value] = 'string';
+      }
+    } else if (!newDataTypes[value]) {
+      // If it's a completely new column, set default data type
+      newDataTypes[value] = 'string';
+    }
+
+    onChange({
+      required_columns: newRequiredColumns,
+      data_types: newDataTypes
+    });
   };
 
   const addRequiredColumn = () => {
-    onChange({ ...schema, required_columns: [...schema.required_columns, ''] });
+    const newColumnName = `new_column_${schema.required_columns.length + 1}`;
+    const newRequiredColumns = [...schema.required_columns, newColumnName];
+    const newDataTypes = { ...schema.data_types, [newColumnName]: 'string' };
+    onChange({ required_columns: newRequiredColumns, data_types: newDataTypes });
   };
 
   const removeRequiredColumn = (index: number) => {
+    const columnToRemove = schema.required_columns[index];
     const newRequiredColumns = schema.required_columns.filter((_, i) => i !== index);
-    onChange({ ...schema, required_columns: newRequiredColumns });
+    const newDataTypes = { ...schema.data_types };
+
+    // Remove the corresponding data type entry
+    if (columnToRemove && newDataTypes[columnToRemove]) {
+      delete newDataTypes[columnToRemove];
+    }
+
+    onChange({ required_columns: newRequiredColumns, data_types: newDataTypes });
   };
 
-  const handleDataTypeChange = (oldKey: string, newKey: string, value: string) => {
+  const handleDataTypeKeyChange = (oldKey: string, newKey: string) => {
     const newDataTypes = { ...schema.data_types };
     if (oldKey !== newKey) {
-        delete newDataTypes[oldKey];
+      newDataTypes[newKey] = newDataTypes[oldKey] || 'string';
+      delete newDataTypes[oldKey];
+      onChange({ ...schema, data_types: newDataTypes });
     }
-    newDataTypes[newKey] = value;
+  };
+
+  const handleDataTypeValueChange = (key: string, value: string) => {
+    const newDataTypes = { ...schema.data_types };
+    newDataTypes[key] = value;
     onChange({ ...schema, data_types: newDataTypes });
   };
 
   const addDataType = () => {
-    const newKey = `new_column_${Object.keys(schema.data_types).length}`;
+    const newKey = `new_column_${Object.keys(schema.data_types).length + 1}`;
     onChange({ ...schema, data_types: { ...schema.data_types, [newKey]: 'string' } });
   };
 
@@ -46,6 +84,14 @@ const SchemaEditor: React.FC<SchemaEditorProps> = ({ schema, onChange }) => {
     onChange({ ...schema, data_types: newDataTypes });
   };
 
+  // Sync data types with required columns
+  const syncDataTypesWithColumns = () => {
+    const newDataTypes: { [key: string]: string } = {};
+    schema.required_columns.forEach(column => {
+      newDataTypes[column] = schema.data_types[column] || 'string';
+    });
+    onChange({ ...schema, data_types: newDataTypes });
+  };
 
   return (
     <div style={{ border: '1px solid #ccc', padding: '1rem', borderRadius: '5px' }}>
@@ -60,6 +106,7 @@ const SchemaEditor: React.FC<SchemaEditorProps> = ({ schema, onChange }) => {
                 value={col}
                 onChange={(e) => handleRequiredColumnChange(index, e.target.value)}
                 style={{ flexGrow: 1 }}
+                placeholder="Column name"
               />
               <button onClick={() => removeRequiredColumn(index)}>Remove</button>
             </div>
@@ -68,18 +115,30 @@ const SchemaEditor: React.FC<SchemaEditorProps> = ({ schema, onChange }) => {
         </div>
         <div>
           <h3>Data Types</h3>
+          <div style={{ marginBottom: '1rem' }}>
+            <button onClick={syncDataTypesWithColumns} style={{ marginBottom: '0.5rem' }}>
+              Sync with Required Columns
+            </button>
+          </div>
           {Object.entries(schema.data_types).map(([key, value]) => (
             <div key={key} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: '0.5rem', marginBottom: '0.5rem' }}>
               <input
                 type="text"
                 value={key}
-                onChange={(e) => handleDataTypeChange(key, e.target.value, value)}
+                onChange={(e) => handleDataTypeKeyChange(key, e.target.value)}
+                placeholder="Column name"
               />
-              <input
-                type="text"
+              <select
                 value={value}
-                onChange={(e) => handleDataTypeChange(key, key, e.target.value)}
-              />
+                onChange={(e) => handleDataTypeValueChange(key, e.target.value)}
+                style={{ padding: '0.25rem' }}
+              >
+                <option value="string">string</option>
+                <option value="integer">integer</option>
+                <option value="float">float</option>
+                <option value="boolean">boolean</option>
+                <option value="date">date</option>
+              </select>
               <button onClick={() => removeDataType(key)}>Remove</button>
             </div>
           ))}
