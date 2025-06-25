@@ -1,0 +1,16 @@
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Application\bin\Debug\net8.0\ETLSpecification.Application.deps.json
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Application\bin\Debug\net8.0\ETLSpecification.Application.dll
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Application\bin\Debug\net8.0\ETLSpecification.Application.pdb
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Application\bin\Debug\net8.0\ETLSpecification.Domain.dll
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Application\bin\Debug\net8.0\ETLSpecification.Domain.pdb
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Application\obj\Debug\net8.0\ETLSpecification.Application.csproj.AssemblyReference.cache
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Application\obj\Debug\net8.0\ETLSpecification.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Application\obj\Debug\net8.0\ETLSpecification.Application.AssemblyInfoInputs.cache
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Application\obj\Debug\net8.0\ETLSpecification.Application.AssemblyInfo.cs
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Application\obj\Debug\net8.0\ETLSpecification.Application.csproj.CoreCompileInputs.cache
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Application\obj\Debug\net8.0\ETLSpecification.Application.sourcelink.json
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Application\obj\Debug\net8.0\ETLSpeci.E1060839.Up2Date
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Application\obj\Debug\net8.0\ETLSpecification.Application.dll
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Application\obj\Debug\net8.0\refint\ETLSpecification.Application.dll
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Application\obj\Debug\net8.0\ETLSpecification.Application.pdb
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Application\obj\Debug\net8.0\ref\ETLSpecification.Application.dll

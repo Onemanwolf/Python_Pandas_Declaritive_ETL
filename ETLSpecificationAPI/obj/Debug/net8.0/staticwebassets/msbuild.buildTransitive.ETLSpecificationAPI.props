@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\ETLSpecificationAPI.props" />
+</Project>

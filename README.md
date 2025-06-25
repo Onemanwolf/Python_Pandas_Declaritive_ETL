@@ -1,239 +1,363 @@
-# Declarative Python ETL with Pandas
+# ETL Specification Web API
 
-A comprehensive Python application that demonstrates declarative ETL (Extract, Transform, Load) processing using pandas. The application processes employee performance data and calculates bonuses based on a JSON specification that defines schema, validation rules, and business logic.
+A .NET 8 Web API for managing ETL (Extract, Transform, Load) specifications with MongoDB storage, following Clean Architecture and Domain-Driven Design principles.
+
+## Architecture Overview
+
+The solution follows Clean Architecture with the following layers:
+
+- **Domain Layer**: Core entities, interfaces, and validation rules
+- **Application Layer**: Business logic, services, and DTOs
+- **Infrastructure Layer**: Data access, MongoDB repository implementation
+- **Web API Layer**: Controllers and API endpoints
 
 ## Features
 
-- **Declarative Processing**: Define data processing logic in JSON specification files
-- **Schema Validation**: Comprehensive validation rules for data quality
-- **Business Logic Engine**: Flexible formula-based calculations
-- **Performance-Based Bonus System**: Multi-factor bonus calculations
-- **Data Quality Checks**: Range validation, null checks, and uniqueness validation
-- **Reporting**: Automated report generation with summary statistics
-- **Logging**: Comprehensive logging for debugging and monitoring
+- ✅ CRUD operations for ETL specifications
+- ✅ Comprehensive validation using FluentValidation
+- ✅ MongoDB storage with optimized indexes
+- ✅ JSON import/export functionality
+- ✅ Business rule validation
+- ✅ Client and domain-based filtering
+- ✅ Swagger/OpenAPI documentation
+- ✅ Clean Architecture implementation
+- ✅ Domain-Driven Design principles
 
-## Project Structure
+## Prerequisites
 
-```
-Python_Pandas_Declaritive_ETL/
-├── app.py                          # Main application file
-├── etl_specification.json          # JSON specification for ETL processing
-├── requirements.txt                # Python dependencies
-├── README.md                       # This file
-├── sample_employee_data.csv        # Sample input data (generated)
-├── processed_employee_data.csv     # Processed output data
-└── processing_report.json          # Processing summary report
-```
+- .NET 8 SDK
+- MongoDB (local or cloud instance)
+- Visual Studio 2022 or VS Code
 
-## Installation
+## Getting Started
 
-1. **Clone or download the project**
-2. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-## Usage
-
-### Running the Application
+### 1. Clone the Repository
 
 ```bash
-python app.py
+git clone <repository-url>
+cd ETLSpecificationAPI
 ```
 
-The application will:
-1. Generate sample employee data (if not present)
-2. Load the ETL specification from `etl_specification.json`
-3. Process the data according to the specification
-4. Generate reports and save processed data
+### 2. Configure MongoDB
 
-### Output Files
+Update the MongoDB connection string in `appsettings.json`:
 
-- **`processed_employee_data.csv`**: Final processed data with all calculated columns
-- **`processing_report.json`**: Summary report with statistics and bonus information
-
-## ETL Specification Format
-
-The JSON specification file (`etl_specification.json`) contains:
-
-### Schema Definition
 ```json
 {
+  "MongoDB": {
+    "ConnectionString": "mongodb://localhost:27017",
+    "DatabaseName": "ETLSpecifications",
+    "CollectionName": "Specifications"
+  }
+}
+```
+
+### 3. Build and Run
+
+```bash
+# Restore packages
+dotnet restore
+
+# Build the solution
+dotnet build
+
+# Run the API
+dotnet run --project ETLSpecificationAPI
+```
+
+The API will be available at:
+- **API**: https://localhost:7001
+- **Swagger UI**: https://localhost:7001/swagger
+
+## API Endpoints
+
+### ETL Specifications
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/ETLSpecification` | Get all ETL specifications |
+| GET | `/api/ETLSpecification/{id}` | Get specification by ID |
+| GET | `/api/ETLSpecification/client/{clientId}` | Get specification by Client ID |
+| GET | `/api/ETLSpecification/domain/{businessDomain}` | Get specifications by business domain |
+| GET | `/api/ETLSpecification/client/{clientId}/domain/{businessDomain}` | Get specifications by client and domain |
+| POST | `/api/ETLSpecification` | Create new specification |
+| PUT | `/api/ETLSpecification/{id}` | Update specification |
+| DELETE | `/api/ETLSpecification/{id}` | Delete specification |
+
+### Validation
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/ETLSpecification/validate` | Validate specification object |
+| GET | `/api/ETLSpecification/{id}/validate` | Validate specification by ID |
+
+### Import/Export
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/ETLSpecification/{id}/export` | Export specification to JSON |
+| POST | `/api/ETLSpecification/import` | Import specification from JSON |
+
+## Data Model
+
+### ETL Specification Structure
+
+```json
+{
+  "id": "string",
+  "clientId": "string",
+  "businessDomain": "string",
+  "pythonNotebookIds": ["string"],
+  "metadata": {
+    "name": "string",
+    "version": "string",
+    "description": "string",
+    "createdDate": "datetime",
+    "author": "string"
+  },
   "schema": {
-    "required_columns": ["employee_id", "employee_name", ...],
-    "data_types": {
-      "employee_id": "integer",
-      "base_salary": "float",
-      ...
+    "requiredColumns": ["string"],
+    "dataTypes": {
+      "columnName": "dataType"
     }
-  }
-}
-```
-
-### Validation Rules
-```json
-{
-  "validation_rules": [
+  },
+  "validationRules": [
     {
-      "column": "base_salary",
-      "type": "range",
-      "parameters": {
-        "min": 30000,
-        "max": 200000
-      }
+      "column": "string",
+      "type": "string",
+      "description": "string",
+      "parameters": {}
     }
-  ]
-}
-```
-
-### Business Rules
-```json
-{
-  "business_rules": [
-    {
-      "name": "sales_performance_score",
-      "description": "Calculate sales performance score",
-      "formula": "np.where(df['sales_target'] > 0, df['actual_sales'] / df['sales_target'], 0)",
-      "dependencies": ["actual_sales", "sales_target"],
-      "output_column": "sales_performance_score"
-    }
-  ]
-}
-```
-
-### Constants
-```json
-{
+  ],
   "constants": {
-    "SALES_BONUS_RATE": 0.05,
-    "MAX_BONUS_PERCENTAGE": 0.25,
-    "DEPARTMENT_BONUS_MULTIPLIERS": {
-      "Sales": 1.2,
-      "Engineering": 1.1
+    "constantName": "value"
+  },
+  "businessRules": [
+    {
+      "name": "string",
+      "description": "string",
+      "formula": "string",
+      "dependencies": ["string"],
+      "outputColumn": "string"
     }
-  }
+  ],
+  "outputSchema": {
+    "requiredColumns": ["string"],
+    "optionalColumns": ["string"]
+  },
+  "createdAt": "datetime",
+  "updatedAt": "datetime",
+  "createdBy": "string",
+  "updatedBy": "string",
+  "isActive": "boolean",
+  "version": "number"
 }
 ```
-
-## Bonus Calculation Logic
-
-The application calculates employee bonuses based on multiple performance factors:
-
-### Performance Metrics
-1. **Sales Performance**: Actual sales vs. target sales ratio
-2. **Customer Satisfaction**: Normalized satisfaction scores
-3. **Project Completion**: Number of projects completed
-4. **Attendance Rate**: Employee attendance percentage
-5. **Loyalty**: Years of service
-
-### Bonus Components
-- **Sales Bonus**: Based on sales performance (5% of base salary)
-- **Satisfaction Bonus**: Based on customer satisfaction (2% of base salary)
-- **Project Bonus**: Fixed amount per project completed ($500)
-- **Attendance Bonus**: Based on attendance rate (1% of base salary)
-- **Loyalty Bonus**: Based on years of service (0.5% of base salary)
-
-### Multipliers
-- **Department Multiplier**: Varies by department (Sales: 1.2x, Engineering: 1.1x, etc.)
-- **Performance Multiplier**: Based on overall performance score
-  - Excellent (≥90%): 1.5x
-  - Good (≥60%): 1.0x
-  - Needs Improvement (<60%): 0.5x
-
-### Caps and Limits
-- Maximum bonus: 25% of base salary
-- Minimum performance threshold: 60%
 
 ## Validation Rules
 
-The system validates data using various rule types:
+The API validates ETL specifications using the following rules:
 
-- **`not_null`**: Ensures column has no null values
-- **`unique`**: Ensures column values are unique
-- **`range`**: Validates values within specified min/max ranges
+### Required Fields
+- ClientId (unique)
+- BusinessDomain
+- Metadata (name, version)
+- Schema (required columns, data types)
+- At least one validation rule
+- At least one business rule
+- At least one constant
+- Output schema
 
-## Customization
+### Business Rule Validation
+- Formula syntax validation
+- Dependency validation (all dependencies must exist)
+- Output column uniqueness
+- Valid column names (alphanumeric with underscores)
 
-### Adding New Business Rules
+### Cross-Property Validation
+- Business rule dependencies must reference existing columns
+- Output schema columns must be defined in business rules or schema
+- Data types must be defined for all required columns
 
-1. Add a new rule to the `business_rules` array in `etl_specification.json`:
-```json
-{
-  "name": "custom_bonus",
-  "description": "Custom bonus calculation",
-  "formula": "df['base_salary'] * 0.1",
-  "dependencies": ["base_salary"],
-  "output_column": "custom_bonus"
-}
+## Example Usage
+
+### Create a New ETL Specification
+
+```bash
+curl -X POST "https://localhost:7001/api/ETLSpecification" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "clientId": "client123",
+    "businessDomain": "Finance",
+    "pythonNotebookIds": ["notebook1", "notebook2"],
+    "metadata": {
+      "name": "Employee Bonus Calculation",
+      "version": "1.0",
+      "description": "ETL for calculating employee bonuses",
+      "author": "John Doe"
+    },
+    "schema": {
+      "requiredColumns": ["employee_id", "base_salary", "performance_score"],
+      "dataTypes": {
+        "employee_id": "integer",
+        "base_salary": "float",
+        "performance_score": "float"
+      }
+    },
+    "validationRules": [
+      {
+        "column": "employee_id",
+        "type": "not_null",
+        "description": "Employee ID must not be null"
+      }
+    ],
+    "constants": {
+      "BONUS_RATE": 0.1
+    },
+    "businessRules": [
+      {
+        "name": "calculate_bonus",
+        "description": "Calculate bonus based on performance",
+        "formula": "df[\"base_salary\"] * df[\"performance_score\"] * BONUS_RATE",
+        "dependencies": ["base_salary", "performance_score"],
+        "outputColumn": "bonus_amount"
+      }
+    ],
+    "outputSchema": {
+      "requiredColumns": ["employee_id", "bonus_amount"],
+      "optionalColumns": ["base_salary", "performance_score"]
+    },
+    "createdBy": "admin"
+  }'
 ```
 
-### Adding New Validation Rules
+### Export to JSON
 
-1. Add a new rule to the `validation_rules` array:
+```bash
+curl -X GET "https://localhost:7001/api/ETLSpecification/{id}/export"
+```
+
+### Import from JSON
+
+```bash
+curl -X POST "https://localhost:7001/api/ETLSpecification/import" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonContent": "{...}",
+    "clientId": "newClient",
+    "createdBy": "admin"
+  }'
+```
+
+## Development
+
+### Project Structure
+
+```
+ETLSpecificationAPI/
+├── ETLSpecification.Domain/           # Domain entities and interfaces
+│   ├── Entities/                      # Core domain entities
+│   ├── Interfaces/                    # Repository interfaces
+│   └── Validators/                    # FluentValidation rules
+├── ETLSpecification.Application/      # Application services and DTOs
+│   ├── DTOs/                         # Data Transfer Objects
+│   ├── Services/                     # Business logic services
+│   └── Mapping/                      # AutoMapper profiles
+├── ETLSpecification.Infrastructure/  # Data access and external services
+│   ├── Data/                         # Configuration classes
+│   ├── Repositories/                 # MongoDB repository implementations
+│   └── DependencyInjection/          # DI configuration
+└── ETLSpecificationAPI/              # Web API layer
+    ├── Controllers/                  # API controllers
+    ├── appsettings.json             # Configuration
+    └── Program.cs                   # Application startup
+```
+
+### Adding New Features
+
+1. **Domain Layer**: Add entities, interfaces, and validation rules
+2. **Application Layer**: Add DTOs, services, and mapping profiles
+3. **Infrastructure Layer**: Implement repositories and external services
+4. **Web API Layer**: Add controllers and endpoints
+
+### Testing
+
+```bash
+# Run tests (when implemented)
+dotnet test
+
+# Run with specific configuration
+dotnet run --environment Development
+```
+
+## Configuration
+
+### Environment Variables
+
+- `MongoDB__ConnectionString`: MongoDB connection string
+- `MongoDB__DatabaseName`: Database name
+- `MongoDB__CollectionName`: Collection name
+
+### Logging
+
+Configure logging levels in `appsettings.json`:
+
 ```json
 {
-  "column": "new_column",
-  "type": "range",
-  "parameters": {
-    "min": 0,
-    "max": 100
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "ETLSpecification": "Debug",
+      "MongoDB": "Debug"
+    }
   }
 }
 ```
 
-### Modifying Constants
+## Deployment
 
-Update the `constants` section to change bonus rates, thresholds, or multipliers.
+### Docker
 
-## Example Output
+```dockerfile
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
 
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY ["ETLSpecificationAPI/ETLSpecificationAPI.csproj", "ETLSpecificationAPI/"]
+COPY ["ETLSpecification.Application/ETLSpecification.Application.csproj", "ETLSpecification.Application/"]
+COPY ["ETLSpecification.Infrastructure/ETLSpecification.Infrastructure.csproj", "ETLSpecification.Infrastructure/"]
+COPY ["ETLSpecification.Domain/ETLSpecification.Domain.csproj", "ETLSpecification.Domain/"]
+RUN dotnet restore "ETLSpecificationAPI/ETLSpecificationAPI.csproj"
+COPY . .
+WORKDIR "/src/ETLSpecificationAPI"
+RUN dotnet build "ETLSpecificationAPI.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "ETLSpecificationAPI.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "ETLSpecificationAPI.dll"]
 ```
-============================================================
-DECLARATIVE ETL PROCESSING RESULTS
-============================================================
 
-Total Records Processed: 100
+### Azure/AWS Deployment
 
-Bonus Summary:
-  Total Bonus Paid: $1,234,567.89
-  Average Bonus: $12,345.68
-  Max Bonus: $45,678.90
-  Min Bonus: $1,234.56
-  Employees With Bonus: 95
+1. Configure MongoDB connection string for cloud environment
+2. Set up environment variables
+3. Deploy using your preferred cloud platform
 
-Sample of processed data:
-   employee_name department  base_salary  performance_score  total_bonus
-0    Employee_1      Sales     85000.0              0.85     15300.0
-1    Employee_2 Engineering     95000.0              0.92     17100.0
-2    Employee_3  Marketing     75000.0              0.78     11700.0
-...
-```
+## Contributing
 
-## Error Handling
-
-The application includes comprehensive error handling:
-- File not found errors
-- JSON parsing errors
-- Data validation errors
-- Business rule calculation errors
-- Detailed logging for debugging
-
-## Performance Considerations
-
-- Uses pandas for efficient data processing
-- Vectorized operations for calculations
-- Memory-efficient data handling
-- Configurable batch processing (for large datasets)
-
-## Extending the System
-
-The modular design allows easy extension:
-- Add new data sources
-- Implement additional validation rules
-- Create custom business logic
-- Add new output formats
-- Integrate with external systems
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
 
 ## License
 
-This project is provided as an educational example for declarative ETL processing with Python and pandas.
+This project is licensed under the MIT License - see the LICENSE file for details.

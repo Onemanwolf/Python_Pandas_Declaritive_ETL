@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "axR+G0jxd2o=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\timot\\source\\repos\\Python_Pandas_Declaritive_ETL\\ETLSpecification.Domain\\ETLSpecification.Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\timot\\.nuget\\packages\\fluentvalidation\\11.8.1\\fluentvalidation.11.8.1.nupkg.sha512",
+    "C:\\Users\\timot\\.nuget\\packages\\system.componentmodel.annotations\\5.0.0\\system.componentmodel.annotations.5.0.0.nupkg.sha512",
+    "C:\\Users\\timot\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.17\\microsoft.netcore.app.ref.8.0.17.nupkg.sha512",
+    "C:\\Users\\timot\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.17\\microsoft.windowsdesktop.app.ref.8.0.17.nupkg.sha512",
+    "C:\\Users\\timot\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.17\\microsoft.aspnetcore.app.ref.8.0.17.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,13 @@
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Domain\bin\Debug\net8.0\ETLSpecification.Domain.deps.json
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Domain\bin\Debug\net8.0\ETLSpecification.Domain.dll
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Domain\bin\Debug\net8.0\ETLSpecification.Domain.pdb
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Domain\obj\Debug\net8.0\ETLSpecification.Domain.csproj.AssemblyReference.cache
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Domain\obj\Debug\net8.0\ETLSpecification.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Domain\obj\Debug\net8.0\ETLSpecification.Domain.AssemblyInfoInputs.cache
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Domain\obj\Debug\net8.0\ETLSpecification.Domain.AssemblyInfo.cs
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Domain\obj\Debug\net8.0\ETLSpecification.Domain.csproj.CoreCompileInputs.cache
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Domain\obj\Debug\net8.0\ETLSpecification.Domain.sourcelink.json
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Domain\obj\Debug\net8.0\ETLSpecification.Domain.dll
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Domain\obj\Debug\net8.0\refint\ETLSpecification.Domain.dll
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Domain\obj\Debug\net8.0\ETLSpecification.Domain.pdb
+C:\Users\timot\source\repos\Python_Pandas_Declaritive_ETL\ETLSpecification.Domain\obj\Debug\net8.0\ref\ETLSpecification.Domain.dll
